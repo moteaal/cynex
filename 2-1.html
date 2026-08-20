@@ -1,0 +1,345 @@
+<?php
+session_start();
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['form_name']) && $_POST['form_name'] == 'loginform')
+{
+   $success_page = '';
+   $error_page = basename(__FILE__);
+   $database = './usersdb.php';
+   $crypt_pass = md5($_POST['password']);
+   $found = false;
+   $db_email = '';
+   $db_fullname = '';
+   $db_username = '';
+   $session_timeout = 600;
+   if (filesize($database) > 0)
+   {
+      $items = file($database, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+      foreach ($items as $line)
+      {
+         list($username, $password, $email, $name, $active) = explode('|', trim($line));
+         if ($username == $_POST['username'] && $active != "0" && $password == $crypt_pass)
+         {
+            $found = true;
+            $db_email = $email;
+            $db_fullname = $name;
+            $db_username = $username;
+            break;
+         }
+      }
+   }
+   if ($found == false)
+   {
+      header('Location: '.$error_page);
+      exit;
+   }
+   else
+   {
+      $_SESSION['email'] = $db_email;
+      $_SESSION['fullname'] = $db_fullname;
+      $_SESSION['username'] = $db_username;
+      $_SESSION['expires_by'] = time() + $session_timeout;
+      $_SESSION['expires_timeout'] = $session_timeout;
+      $rememberme = isset($_POST['rememberme']) ? true : false;
+      if ($rememberme)
+      {
+         setcookie('username', $db_username, time() + 3600*24*30);
+         setcookie('password', $_POST['password'], time() + 3600*24*30);
+      }
+      header('Location: '.$success_page);
+      exit;
+   }
+}
+$username = isset($_COOKIE['username']) ? $_COOKIE['username'] : '';
+$password = isset($_COOKIE['password']) ? $_COOKIE['password'] : '';
+?>
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Untitled Page</title>
+<meta name="generator" content="WYSIWYG Web Builder 21 - https://www.wysiwygwebbuilder.com">
+<link href="fontawesome7.min.css" rel="stylesheet">
+<link href="cynex.css" rel="stylesheet">
+<link href="2-1.css" rel="stylesheet">
+<script src="jscookmenu.min.js"></script>
+<script>
+var cmMenuBar1 =
+{
+   mainFolderLeft: '',
+   mainFolderRight: '',
+   mainItemLeft: '',
+   mainItemRight: '',
+   folderLeft: '',
+   folderRight: '',
+   itemLeft: '',
+   itemRight: '',
+   mainSpacing: 0,
+   subSpacing: 0,
+   delay: 100,
+   offsetHMainAdjust: [0, 0],
+   offsetSubAdjust: [0, 0]
+};
+var cmMenuBar1HSplit = [_cmNoClick, '<td class="MenuBar1MenuSplitLeft"><div></div></td>' +
+                                    '<td class="MenuBar1MenuSplitText"><div></div></td>' +
+                                    '<td class="MenuBar1MenuSplitRight"><div></div></td>'];
+var cmMenuBar1MainVSplit = [_cmNoClick, '<div><table width="25" cellspacing="0"><tr><td class="MenuBar1HorizontalSplit">|</td></tr></table></div>'];
+var cmMenuBar1MainHSplit = [_cmNoClick, '<td colspan="3" class="MenuBar1MainSplitText"><div></div></td>'];
+cmMenuBar1.effect = new CMSlidingEffect(8);
+document.addEventListener('DOMContentLoaded', function(event)
+{
+   cmDrawFromText('MenuBar1', 'hbr', cmMenuBar1, 'MenuBar1');
+});
+</script>
+<script>
+var cmMenuBar2 =
+{
+   mainFolderLeft: '',
+   mainFolderRight: '',
+   mainItemLeft: '',
+   mainItemRight: '',
+   folderLeft: '',
+   folderRight: '',
+   itemLeft: '',
+   itemRight: '',
+   mainSpacing: 0,
+   subSpacing: 0,
+   delay: 100,
+   offsetVMainAdjust: [0, 0],
+   offsetSubAdjust: [0, 0]
+};
+var cmMenuBar2HSplit = [_cmNoClick, '<td class="MenuBar2MenuSplitLeft"><div></div></td>' +
+                                    '<td class="MenuBar2MenuSplitText"><div></div></td>' +
+                                    '<td class="MenuBar2MenuSplitRight"><div></div></td>'];
+var cmMenuBar2MainVSplit = [_cmNoClick, '<div><table width="35" cellspacing="0"><tr><td class="MenuBar2HorizontalSplit">|</td></tr></table></div>'];
+var cmMenuBar2MainHSplit = [_cmNoClick, '<td colspan="3" class="MenuBar2MainSplitText"><div></div></td>'];
+document.addEventListener('DOMContentLoaded', function(event)
+{
+   cmDrawFromText('MenuBar2', 'vbr', cmMenuBar2, 'MenuBar2');
+});
+</script>
+</head>
+<body>
+<div id="wb_Text3" style="position:absolute;left:47px;top:793px;width:1184px;height:209px;text-align:justify;z-index:0;">
+<span style="color:#000000;font-family:Arial;font-size:19px;"><strong>Cynex Systems </strong>provides integrated engineering and manufacturing solutions for small and medium-sized industrial applications. We design and build custom automated machines, mechanical components, electrical and control systems, embedded electronics, and specialized laboratory equipment.<br><br>From individual components to complete automated systems, we combine mechanical, electrical, electronics, mechatronics, and computer engineering to turn ideas and industrial requirements into practical solutions.<br><br><strong>Featured Solutions:</strong><br><br></span></div>
+<div id="wb_Image3" style="position:absolute;left:453px;top:227px;width:798px;height:429px;z-index:1;">
+<img src="images/synex2.jpg" id="Image3" alt="" width="798" height="533"></div>
+<div id="wb_MenuBar1" style="position:absolute;left:0px;top:153px;width:1615px;height:74px;z-index:2;">
+<div id="MenuBar1">
+<ul style="display:none;">
+<li><span></span><a href="./index.html" target="_self">Home</a>
+</li>
+<li><span></span><a href="./2.html" target="_self">Custom&nbsp;Robotics&nbsp;Solutions</a>
+
+<ul>
+<li><span></span><a href="./2-1.html" target="_self">Warehouse&nbsp;Robotics&nbsp;System&nbsp;(WRS)</a>
+</li>
+<li><span></span><a href="./2-2.html" target="_self">Hanger&nbsp;Robot</a>
+</li>
+<li><span></span><a href="./2-3.html" target="_self">Pick-and-Place&nbsp;Robot</a>
+</li>
+<li><span></span><a href="./2-4.html" target="_self">Plant&nbsp;Analysis&nbsp;Vision&nbsp;System</a>
+</li>
+</ul>
+</li>
+<li><span></span><a href="./3.html" target="_self">Engineering&nbsp;&amp;&nbsp;Design</a>
+
+<ul>
+<li><span></span><a href="./3-1.html" target="_self">Machine&nbsp;Design&nbsp;</a>
+</li>
+<li><span></span><a href="./3-2.html" target="_self">Robotic&nbsp;and&nbsp;Mechatronic&nbsp;Systems&nbsp;</a>
+</li>
+<li><span></span><a href="./3-3.html" target="_self">Servo-Mechanisms</a>
+</li>
+<li><span></span><a href="./3-4.html" target="_self">Machine&nbsp;Vision&nbsp;and&nbsp;AI</a>
+</li>
+<li><span></span><a href="./3-5.html" target="_self">Electronic&nbsp;Circuit&nbsp;Design</a>
+</li>
+<li><span></span><a href="./3-6.html" target="_self">Industrial&nbsp;Automation</a>
+</li>
+</ul>
+</li>
+<li><span></span><a href="./4.html" target="_self">Educational&nbsp;&amp;&nbsp;Laboratory&nbsp;Equipment</a>
+
+<ul>
+<li><span></span><a href="./4-1.html" target="_self">Special-Purpose&nbsp;Laboratory&nbsp;Machines</a>
+</li>
+<li><span></span><a href="./4-2.html" target="_self">Industry-Inspired&nbsp;Pneumatic&nbsp;Training&nbsp;Systems</a>
+</li>
+<li><span></span><a href="./4-3.html" target="_self">Industry-Inspired&nbsp;Hydraulic&nbsp;Training&nbsp;Systems</a>
+</li>
+<li><span></span><a href="./4-4.html" target="_self">Microcontroller-Based&nbsp;Training&nbsp;Systems</a>
+</li>
+<li><span></span><a href="./4-5.html" target="_self">Mechatronics&nbsp;Training&nbsp;Systems</a>
+</li>
+<li><span></span><a href="./4-6.html" target="_self">Custom&nbsp;Laboratory&nbsp;Devices&nbsp;&amp;&nbsp;Equipment</a>
+</li>
+</ul>
+</li>
+<li><span></span><a href="./5.html" target="_self">Mechanical&nbsp;Parts&nbsp;Manufacturing</a>
+
+<ul>
+<li><span></span><a href="./5-1.html" target="_self">Custom&nbsp;Parts&nbsp;&amp;&nbsp;CAD&nbsp;Design</a>
+</li>
+<li><span></span><a href="./5-2.html" target="_self">Prototyping</a>
+</li>
+<li><span></span><a href="./5-3.html" target="_self">CNC&nbsp;Machining&nbsp;</a>
+</li>
+<li><span></span><a href="./5-4.html" target="_self">Laser&nbsp;Cutting&nbsp;</a>
+</li>
+<li><span></span><a href="./5-5.html" target="_self">3D&nbsp;Printing&nbsp;</a>
+</li>
+<li><span></span><a href="./5-6.html" target="_self">Sheet&nbsp;Metal&nbsp;Fabrication&nbsp;</a>
+</li>
+</ul>
+</li>
+<li><span></span><a href="./6.html" target="_self">PCB&nbsp;&amp;&nbsp;Embedded&nbsp;Control&nbsp;Systems</a>
+
+<ul>
+<li><span></span><a href="./6-1.html" target="_self">PCB&nbsp;Design&nbsp;/&nbsp;Manufacturing</a>
+</li>
+<li><span></span><a href="./6-2.html" target="_self">Microcontroller-Based&nbsp;Systems&nbsp;</a>
+</li>
+<li><span></span><a href="./6-3.html" target="_self">Custom&nbsp;Electronic&nbsp;Controllers</a>
+</li>
+<li><span></span><a href="./6-4.html" target="_self">Microcontroller-Based&nbsp;Control&nbsp;Boards</a>
+</li>
+<li><span></span><a href="./6-5.html" target="_self">Sensor&nbsp;&amp;&nbsp;Actuator&nbsp;Interfaces</a>
+</li>
+</ul>
+</li>
+<li><span></span><a href="./7.html" target="_self">Products</a>
+
+<ul>
+<li><span></span><a href="./7-1.html" target="_self">DC&nbsp;Servo&nbsp;Motors</a>
+</li>
+<li><span></span><a href="./7-2.html" target="_self">Stepper&nbsp;Motors&nbsp;and&nbsp;Drivers</a>
+</li>
+<li><span></span><a href="./7-3.html" target="_self">Control&nbsp;Units</a>
+</li>
+<li><span></span><a href="./7-4.html" target="_self">Control&nbsp;Panel&nbsp;Interface</a>
+</li>
+</ul>
+</li>
+<li><span></span><a href="./8.html" target="_self">About&nbsp;Us</a>
+</li>
+</ul>
+</div>
+</div>
+<a id="Button1" href="mailto:moteaal@mail.com" style="position:absolute;left:1466px;top:486px;width:218px;height:30px;z-index:3;">>> Get In Touch</a>
+<div id="wb_Image2" style="position:absolute;left:699px;top:52px;width:1001px;height:79px;z-index:4;">
+<img src="images/Cynex icons 3.jpg" id="Image2" alt="" width="1001" height="79"></div>
+<div id="wb_MenuBar2" style="position:absolute;left:13px;top:284px;width:422px;height:420px;z-index:5;">
+<div id="MenuBar2">
+<ul style="display:none;">
+<li><span></span><a href="./5-6.html" target="_self">&gt;&nbsp;&nbsp;Prototyping&nbsp;</a>
+</li>
+<li><span></span><a href="./2-1.html" target="_self">&gt;&nbsp;&nbsp;Warehouse&nbsp;Robotics&nbsp;System&nbsp;(WRS)</a>
+</li>
+<li><span></span><a href="./7-2.html" target="_self">&gt;&nbsp;&nbsp;Stepper&nbsp;Motors&nbsp;and&nbsp;Drivers</a>
+</li>
+<li><span></span><a href="./3-1.html" target="_self">&gt;&nbsp;&nbsp;Machine&nbsp;Design&nbsp;</a>
+</li>
+<li><span></span><a href="./5-1.html" target="_self">&gt;&nbsp;&nbsp;Custom&nbsp;Parts&nbsp;&amp;&nbsp;CAD&nbsp;Design</a>
+</li>
+<li><span></span><a href="./5-2.html" target="_self">&gt;&nbsp;&nbsp;CNC&nbsp;Machining&nbsp;</a>
+</li>
+<li><span></span><a href="./3-5.html" target="_self">&gt;&nbsp;&nbsp;Electronic&nbsp;Circuit&nbsp;Design</a>
+</li>
+<li><span></span><a href="./4-5.html" target="_self">&gt;&nbsp;&nbsp;Custom&nbsp;Laboratory&nbsp;Devices&nbsp;&amp;&nbsp;Equipment</a>
+</li>
+<li><span></span><a href="./3-2.html" target="_self">&gt;&nbsp;&nbsp;Robotic&nbsp;and&nbsp;Mechatronic&nbsp;Systems&nbsp;</a>
+</li>
+</ul>
+</div>
+</div>
+<div id="wb_Text1" style="position:absolute;left:33px;top:227px;width:266px;height:21px;z-index:6;">
+<span style="color:#00008B;font-family:Arial;font-size:19px;"><strong>Popular Services:</strong></span></div>
+<div id="wb_Icon1" style="position:absolute;left:209px;top:217px;width:37px;height:40px;text-align:center;z-index:7;">
+<div id="Icon1"><i class="fa fa-circle-down"></i></div></div>
+<div id="wb_Text2" style="position:absolute;left:628px;top:675px;width:703px;height:62px;z-index:8;">
+<span style="color:#4B0082;font-family:Arial;font-size:32px;"><strong>Cynex Systems&nbsp;&nbsp;&nbsp; <br></strong></span><span style="color:#000000;font-family:Arial;font-size:24px;">Engineering. Manufacturing. Automation<strong>.</strong></span></div>
+<div id="wb_Image4" style="position:absolute;left:1284px;top:228px;width:165px;height:2075px;z-index:9;">
+<img src="images/cynex011.jpg" id="Image4" alt="" width="165" height="2075"></div>
+<div id="wb_Text4" style="position:absolute;left:229px;top:1002px;width:728px;height:104px;z-index:10;">
+<span style="color:#000000;font-family:Arial;font-size:19px;"><strong>Custom Automation &amp; Machinery<br></strong><br>Design and manufacturing of custom automated machines, special-purpose machinery, assembly systems, testing equipment, and industrial automation solutions.<br></span></div>
+<div id="wb_Icon2" style="position:absolute;left:125px;top:987px;width:83px;height:109px;text-align:center;z-index:11;">
+<div id="Icon2"><i class="fa fa-regular fa-clipboard"></i></div></div>
+<div id="wb_Text5" style="position:absolute;left:345px;top:1156px;width:660px;height:125px;text-align:justify;z-index:12;">
+<span style="color:#000000;font-family:Arial;font-size:19px;"><strong><br>Mechanical Parts Manufacturing</strong><br><br>Custom mechanical components manufactured using CNC machining, turning, milling, laser cutting, sheet metal fabrication, and 3D printing.<br></span></div>
+<div id="wb_Icon3" style="position:absolute;left:256px;top:1181px;width:74px;height:72px;text-align:center;z-index:13;">
+<div id="Icon3"><i class="fa fa-regular fa-bell"></i></div></div>
+<div id="wb_Text6" style="position:absolute;left:428px;top:1334px;width:732px;height:137px;text-align:justify;z-index:14;">
+<span style="color:#000000;font-family:Arial;font-size:19px;"><br><strong>Electrical &amp; Control Systems<br></strong><br>Electrical system design, control panels, machine wiring, sensors, actuators, PLCs, HMIs, and industrial control systems.<br></span><span style="color:#000000;font-family:Arial;font-size:16px;"><br></span></div>
+<div id="wb_Icon4" style="position:absolute;left:330px;top:1362px;width:83px;height:63px;text-align:center;z-index:15;">
+<div id="Icon4"><i class="fa fa-regular fa-message"></i></div></div>
+<div id="wb_Text7" style="position:absolute;left:531px;top:1518px;width:700px;height:125px;text-align:justify;z-index:16;">
+<span style="color:#000000;font-family:Arial;font-size:19px;"><br><strong>PCB &amp; Embedded Control Systems<br></strong><br>Custom PCB design, prototyping, assembly, microcontroller-based control boards, embedded systems, and digital control solutions.<br></span></div>
+<div id="wb_Icon5" style="position:absolute;left:428px;top:1553px;width:86px;height:62px;text-align:center;z-index:17;">
+<div id="Icon5"><i class="fa fa-regular fa-circle-right"></i></div></div>
+<div id="wb_Text8" style="position:absolute;left:537px;top:1705px;width:703px;height:188px;z-index:18;">
+<span style="color:#000000;font-family:Arial;font-size:19px;"><br><strong>Industrial Engineering &amp; Projects<br></strong><br>Design and development of customized industrial equipment, prototypes, production systems, and complete engineering projects.<br><br><br><br></span></div>
+<div id="wb_Icon6" style="position:absolute;left:428px;top:1739px;width:86px;height:60px;text-align:center;z-index:19;">
+<div id="Icon6"><i class="fa fa-display"></i></div></div>
+<div id="wb_Text9" style="position:absolute;left:435px;top:1889px;width:796px;height:146px;z-index:20;">
+<span style="color:#000000;font-family:Arial;font-size:19px;"><br><strong>Laboratory &amp; Training Systems<br></strong><br>Custom laboratory equipment and industry-inspired training systems based on microcontrollers, PLCs, pneumatics, hydraulics, electronics, and mechatronics.<br><br></span></div>
+<div id="wb_Icon7" style="position:absolute;left:330px;top:1926px;width:98px;height:56px;text-align:center;z-index:21;">
+<div id="Icon7"><i class="fa fa-regular fa-eye"></i></div></div>
+<div id="wb_Text10" style="position:absolute;left:148px;top:2084px;width:1103px;height:278px;z-index:22;">
+<span style="color:#000000;font-family:Arial;font-size:16px;"><br></span><span style="color:#000000;font-family:Arial;font-size:21px;"><strong>From Concept to Complete Solution</strong></span><span style="color:#000000;font-family:Arial;font-size:16px;"><br><br></span><span style="color:#000000;font-family:Arial;font-size:19px;">At <strong>Cynex Systems</strong>, we can support your project from initial concept and engineering design through prototyping, manufacturing, assembly, control integration, testing, and final delivery.<br></span><span style="color:#000000;font-family:Arial;font-size:21px;"><br><strong><em>Design </em></strong></span><span style="color:#000000;font-family:'Cambria Math';font-size:21px;"><strong><em>&nbsp;&nbsp;&nbsp; </em></strong></span><span style="color:#000000;font-family:Arial;font-size:21px;"><strong><em> &gt;&gt;&gt;&nbsp;&nbsp;&nbsp; Build </em></strong></span><span style="color:#000000;font-family:'Cambria Math';font-size:21px;"><strong><em>&nbsp;&nbsp;&nbsp; &gt;&gt;&gt;&nbsp;&nbsp;&nbsp; </em></strong></span><span style="color:#000000;font-family:Arial;font-size:21px;"><strong><em> Automate</em></strong><br></span><span style="color:#000000;font-family:Arial;font-size:19px;"><br><br></span><span style="color:#800080;font-family:Arial;font-size:24px;">Have a component to manufacture, a machine to build, or an industrial problem to solve?<br></span><span style="background-color:#DCDCDC;color:#000000;font-family:Arial;font-size:24px;">Let's build the solution.</span><span style="color:#800080;font-family:Arial;font-size:24px;"><br></span><span style="color:#000000;font-family:Arial;font-size:16px;"><br></span></div>
+<div id="wb_Text11" style="position:absolute;left:489px;top:2372px;width:373px;height:18px;z-index:23;">
+<span style="color:#000000;font-family:Arial;font-size:16px;">&#0169; CyNex Systems, All rights reserved.&nbsp; 2024</span></div>
+<div id="wb_Icon8" style="position:absolute;left:47px;top:2108px;width:76px;height:82px;text-align:center;z-index:24;">
+<div id="Icon8"><i class="fa fa-regular fa-chart-bar"></i></div></div>
+<div id="wb_Text12" style="position:absolute;left:75px;top:682px;width:475px;height:122px;z-index:25;">
+<span style="color:#4B0082;font-family:Arial;font-size:21px;line-height:24px;">You are here: <br><strong>Cynex.ca - Custom Robotics Solutions<br></strong></span><span style="color:#4B0082;font-family:Arial;font-size:21px;line-height:35px;"><strong>Warehouse Robotics System (WRS)</strong></span><span style="color:#000000;font-family:Calibri;font-size:15px;line-height:24px;"><strong><br></strong></span><span style="color:#4B0082;font-family:Arial;font-size:21px;line-height:12px;"><strong><br></strong></span></div>
+<div id="wb_Icon9" style="position:absolute;left:21px;top:689px;width:43px;height:34px;text-align:center;z-index:26;">
+<div id="Icon9"><i class="fa fa-chevron-circle-right"></i></div></div>
+<div id="wb_Text13" style="position:absolute;left:446px;top:28px;width:294px;height:115px;z-index:27;">
+<ul style="list-style-type:disc;">
+<li style="margin:0 0 0 24px;">Engineering
+</li>
+<li style="margin:0 0 0 24px;">Manufacturing
+</li>
+<li style="margin:0 0 0 24px;">Mechatronics
+</li>
+<li style="margin:0 0 0 24px;">AI and Machine Vision
+</li>
+<li style="margin:0 0 0 24px;">Automation And Robotics
+</li>
+</ul></div>
+<div id="wb_Login1" style="position:absolute;left:1466px;top:223px;width:218px;height:228px;z-index:28;">
+<form name="loginform" method="post" accept-charset="UTF-8" action="<?php echo basename(__FILE__); ?>" id="loginform">
+<input type="hidden" name="form_name" value="loginform">
+<table id="Login1">
+<tr>
+   <td class="header">Log In</td>
+</tr>
+<tr>
+   <td class="label"><label for="username">User Name</label></td>
+</tr>
+<tr>
+   <td class="row"><input class="input" name="username" type="text" id="username" value="<?php echo $username; ?>"></td>
+</tr>
+<tr>
+   <td class="label"><label for="password">Password</label></td>
+</tr>
+<tr>
+   <td class="row"><input class="input" name="password" type="password" id="password" value="<?php echo $password; ?>"></td>
+</tr>
+<tr>
+   <td class="row"><input id="rememberme" type="checkbox" name="rememberme"><label for="rememberme">Remember me</label></td>
+</tr>
+<tr>
+   <td class="submit"><input class="button" type="submit" name="login" value="Log In" id="login"></td>
+</tr>
+</table>
+</form>
+</div>
+<div id="wb_Image1" style="position:absolute;left:0px;top:12px;width:395px;height:118px;z-index:29;">
+<img src="images/cynex04.jpg" id="Image1" alt="" width="395" height="80"></div>
+<div id="wb_Text14" style="position:absolute;left:471px;top:589px;width:762px;height:48px;z-index:30;">
+<span style="background-color:#5F9EA0;color:#FFFFFF;font-family:Arial;font-size:21px;">One Idea. One vision.<br>Turning possibilities into performance.</span></div>
+<div id="wb_Icon10" style="position:absolute;left:537px;top:682px;width:80px;height:48px;text-align:center;z-index:31;">
+<div id="Icon10"><i class="fa fa-earth-america"></i></div></div>
+</body>
+</html>
